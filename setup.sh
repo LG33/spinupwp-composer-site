@@ -88,17 +88,20 @@ for param in "$@"; do
     if [[ $param =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
         key="${BASH_REMATCH[1]}"
         value="${BASH_REMATCH[2]}"
+
+        #if [ $key == "DOMAIN" ]; then
+        #    update_nginx_conf "$value"
+        #fi
         
+        # Check if key is GITHUB_TOKEN and set it as a composer config
+        if [ $key == "GITHUB_TOKEN" ]; then
+        	composer config github-oauth.github.com $value
         # Check if key exists in .env.example
-        if grep -q "^${key}=" .env.example; then
+        elif grep -q "^${key}=" .env.example; then
             update_env_var "$key" "$value"
             echo "Updated $key in .env"
         else
             echo "Warning: $key not found in .env.example, skipping..."
-        fi
-
-        if [ $key == "DOMAIN" ]; then
-            update_nginx_conf "$value"
         fi
     else
         echo "Warning: Invalid parameter format: $param (should be KEY=value)"
@@ -106,6 +109,8 @@ for param in "$@"; do
 done
 
 echo "Environment variables have been updated successfully!"
+
+composer install
 
 apt install make
 make -C public/content/mu-plugins/wp-paheko modules
