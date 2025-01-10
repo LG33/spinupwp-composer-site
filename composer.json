@@ -67,11 +67,6 @@
       "public/content/themes/{$name}/": ["type:wordpress-theme"]
     }
   },
-  "scripts": {
-    "post-root-package-install": [
-      "php -r \"copy('.env.example', '.env');\""
-    ]
-  },
   "autoload": {
     "psr-4": {"DeliciousBrains\\SpinupWPComposerSite\\": "app/"}
   }
