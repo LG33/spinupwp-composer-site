@@ -59,11 +59,7 @@ if ( file_exists( $env_config ) ) {
 }
 
 App::define( 'AUTOMATIC_UPDATER_DISABLED', true );
-App::define( 'DISABLE_WP_CRON', env( 'DISABLE_WP_CRON' ) ?: false );
-// Disable the plugin and theme file editor in the admin.
-App::define( 'DISALLOW_FILE_EDIT', true );
-// Disable plugin and theme updates and installation from the admin.
-App::define( 'DISALLOW_FILE_MODS', true );
+App::define('DISABLE_WP_CRON', env('DISABLE_WP_CRON') ?: false);
 
 // Secret keys.
 if ( ! file_exists( __DIR__ . '/keys.php' ) ) {
