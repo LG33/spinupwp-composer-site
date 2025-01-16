@@ -35,7 +35,7 @@ if ( file_exists( $root_dir . '/.env' ) ) {
 App::define( 'WP_ENV', env( 'WP_ENV' ) ?: 'production' );
 App::define( 'WP_HOME', env( 'WP_HOME' ) );
 App::define( 'WP_SITEURL', env( 'WP_SITEURL' ) );
-App::define( 'CONTENT_DIR', '/content' );
+App::define( 'CONTENT_DIR', '/wp-content' );
 App::define( 'WP_CONTENT_DIR', $webroot_dir . CONTENT_DIR );
 App::define( 'WP_CONTENT_URL', WP_HOME . CONTENT_DIR );
 

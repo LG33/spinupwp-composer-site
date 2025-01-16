@@ -1,5 +1,22 @@
 #!/bin/bash
 
+# Function to update or add a variable in .env file
+update_env_var() {
+    local key=$1
+    local value=$2
+    
+    # Check if variable exists in .env
+    if grep -q "^${key}=" .env; then
+        # Update existing variable
+        sed -i "s|^${key}=.*|${key}=${value}|" .env
+        echo "Updated $key in .env"
+    else
+        # Add new variable
+        echo "${key}=${value}" >> .env
+        echo "Added $key in .env"
+    fi
+}
+
 # Check if .env.example exists
 if [ ! -f .env.example ]; then
     echo "Error: .env.example file not found"
@@ -8,6 +25,8 @@ fi
 
 # Create .env file if it doesn't exist
 if [ ! -f .env ]; then
+    cp .env.example .env
+
     # Check if any parameters were provided
     if [ $# -eq 0 ]; then
         echo "Usage: $0 KEY1=value1 KEY2=value2 ..."
@@ -15,24 +34,19 @@ if [ ! -f .env ]; then
         exit 1
     fi
 
+    declare -A env
+
     # Process each parameter
     for param in "$@"; do
         # Check if parameter follows KEY=value format
         if [[ $param =~ ^([A-Za-z_][A-Za-z0-9_]*)=(.*)$ ]]; then
             key="${BASH_REMATCH[1]}"
             value="${BASH_REMATCH[2]}"
-
-            #if [ $key == "DOMAIN" ]; then
-            #    update_nginx_conf "$value"
-            #fi
+            env[$key]=$value
             
-            # Check if key is GITHUB_TOKEN and set it as a composer config
-            if [ $key == "GITHUB_TOKEN" ]; then
-                composer config github-oauth.github.com $value
             # Check if key exists in .env.example
-            elif grep -q "^${key}=" .env.example; then
+            if grep -q "^${key}=" .env.example; then
                 update_env_var "$key" "$value"
-                echo "Updated $key in .env"
             else
                 echo "Warning: $key not found in .env.example, skipping..."
             fi
@@ -43,31 +57,24 @@ if [ ! -f .env ]; then
 
     echo "Environment variables have been updated successfully!"
 
+    composer config github-oauth.github.com ${env[GITHUB_TOKEN]}
     composer install
 
     apt install make
-    cd public/content/mu-plugins/wp-paheko && \
-        make modules && \
-        make plugins
+    make -C public/content/mu-plugins/wp-paheko modules
+    make -C public/content/mu-plugins/wp-paheko plugins
 
-    cd public/wp && \
-        rm -r wp-content && \
-        ln -s ../content content
+    cd public/wp
+    if [ -d wp-content ]; then
+        rm -r wp-content
+    elif [ -f wp-content ]; then
+        rm wp-content
+    fi
+    ln -s ../content wp-content
+    
+    wp core install --url=https://${env[DOMAIN]} --title="${env[TITLE]}" --admin_user="${env[EMAIL]}" --admin_password="${env[PASSWORD]}" --admin_email="${env[EMAIL]}" --skip-email --locale=fr_FR
+    wp plugin activate --all
+    wp theme activate twentytwentyfive
 else
     composer update
 fi
-
-# Function to update or add a variable in .env file
-update_env_var() {
-    local key=$1
-    local value=$2
-    
-    # Check if variable exists in .env
-    if grep -q "^${key}=" .env; then
-        # Update existing variable
-        sed -i "s|^${key}=.*|${key}=${value}|" .env
-    else
-        # Add new variable
-        echo "${key}=${value}" >> .env
-    fi
-}

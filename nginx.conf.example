@@ -1,5 +1,0 @@
-location ~ ^/(admin|m|p|transaction|config|documents)/ {
-        alias /sites/{DOMAIN}/files/public/content/mu-plugins/wp-paheko/src/www/;
-        index index.php /_route.php;
-        try_files $uri $uri/ /index.php?$args;
-}
