@@ -11,12 +11,12 @@ auth.json
 public/wp
 public/.htaccess
 
-public/content/debug.log
-public/content/uploads
-!public/content/uploads/.gitkeep
-public/content/plugins/*
-public/content/themes/twenty*
-public/content/mu-plugins/*
-!public/content/mu-plugins/app.php
+public/wp-content/debug.log
+public/wp-content/uploads/*
+!public/wp-content/uploads/.gitkeep
+public/wp-content/plugins/*
+public/wp-content/themes/twenty*
+public/wp-content/mu-plugins/*
+!public/wp-content/mu-plugins/app.php
 
 

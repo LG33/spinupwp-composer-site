@@ -58,10 +58,10 @@ if [ ! -f .env ]; then
     echo "Environment variables have been updated successfully!"
 
     composer config github-oauth.github.com ${env[GITHUB_TOKEN]}
-    composer install
+    composer install --optimize-autoload --no-dev
 
-    make -C public/content/mu-plugins/wp-paheko modules
-    make -C public/content/mu-plugins/wp-paheko plugins
+    make -C public/wp-content/mu-plugins/wp-paheko modules
+    make -C public/wp-content/mu-plugins/wp-paheko plugins
 
     cd public/wp
     if [ -d wp-content ]; then
