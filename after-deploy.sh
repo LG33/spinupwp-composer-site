@@ -60,7 +60,6 @@ if [ ! -f .env ]; then
     composer config github-oauth.github.com ${env[GITHUB_TOKEN]}
     composer install
 
-    apt install make
     make -C public/content/mu-plugins/wp-paheko modules
     make -C public/content/mu-plugins/wp-paheko plugins
 
@@ -70,11 +69,11 @@ if [ ! -f .env ]; then
     elif [ -f wp-content ]; then
         rm wp-content
     fi
-    ln -s ../content wp-content
+    ln -s ../wp-content
     
     wp core install --url=https://${env[DOMAIN]} --title="${env[TITLE]}" --admin_user="${env[EMAIL]}" --admin_password="${env[PASSWORD]}" --admin_email="${env[EMAIL]}" --skip-email --locale=fr_FR
     wp plugin activate --all
-    wp theme activate twentytwentyfive
+    wp theme install twentytwentyfive --activate
 else
     composer update
 fi
