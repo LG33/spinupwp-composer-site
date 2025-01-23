@@ -58,22 +58,25 @@ if [ ! -f .env ]; then
     echo "Environment variables have been updated successfully!"
 
     composer config github-oauth.github.com ${env[GITHUB_TOKEN]}
-    composer install --optimize-autoload --no-dev
-
-    make -C public/wp-content/mu-plugins/wp-paheko modules
-    make -C public/wp-content/mu-plugins/wp-paheko plugins
-
-    cd public/wp
-    if [ -d wp-content ]; then
-        rm -r wp-content
-    elif [ -f wp-content ]; then
-        rm wp-content
-    fi
-    ln -s ../wp-content
-    
-    wp core install --url=https://${env[DOMAIN]} --title="${env[TITLE]}" --admin_user="${env[EMAIL]}" --admin_password="${env[PASSWORD]}" --admin_email="${env[EMAIL]}" --skip-email --locale=fr_FR
-    wp plugin activate --all
-    wp theme install twentytwentyfive --activate
+    composer install --no-dev
 else
     composer update
 fi
+
+make -C public/wp-content/mu-plugins/wp-paheko modules
+make -C public/wp-content/mu-plugins/wp-paheko plugins
+
+cp public/wp-content/mu-plugins/wp-paheko/src/config.dist.php public/wp-content/mu-plugins/wp-paheko/src/config.local.php
+ln -s ../../../../paheko/db public/wp-content/mu-plugins/wp-paheko/src/data/db
+
+cd public/wp
+if [ -d wp-content ]; then
+    rm -r wp-content
+elif [ -f wp-content ]; then
+    rm wp-content
+fi
+ln -s ../wp-content
+    
+wp core install --url=https://${env[DOMAIN]} --title="${env[TITLE]}" --admin_user="${env[EMAIL]}" --admin_password="${env[PASSWORD]}" --admin_email="${env[EMAIL]}" --skip-email --locale=fr_FR
+wp plugin activate --all
+wp theme install twentytwentyfive --activate

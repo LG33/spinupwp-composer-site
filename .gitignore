@@ -18,5 +18,8 @@ public/wp-content/plugins/*
 public/wp-content/themes/twenty*
 public/wp-content/mu-plugins/*
 !public/wp-content/mu-plugins/app.php
+public/wp-content/languages/*
 
 
+public/wp-content/paheko/db/*
+!public/wp-content/paheko/db/.gitkeep
