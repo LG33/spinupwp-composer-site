@@ -65,6 +65,7 @@ fi
 
 cp public/wp-content/mu-plugins/wp-paheko/src/config.dist.php public/wp-content/mu-plugins/wp-paheko/src/config.local.php
 ln -s ../../../../../vendor/paheko/paheko-modules public/wp-content/mu-plugins/wp-paheko/src/modules
+ln -s ../../../paheko/data public/wp-content/mu-plugins/wp-paheko/src
 
 cd public/wp
 if [ -d wp-content ]; then
