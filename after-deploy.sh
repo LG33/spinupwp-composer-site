@@ -63,11 +63,8 @@ else
     composer update
 fi
 
-make -C public/wp-content/mu-plugins/wp-paheko modules
-make -C public/wp-content/mu-plugins/wp-paheko plugins
-
 cp public/wp-content/mu-plugins/wp-paheko/src/config.dist.php public/wp-content/mu-plugins/wp-paheko/src/config.local.php
-ln -s ../../../../paheko/db public/wp-content/mu-plugins/wp-paheko/src/data/db
+ln -s ../../../../../vendor/paheko/paheko-modules public/wp-content/mu-plugins/wp-paheko/src/modules
 
 cd public/wp
 if [ -d wp-content ]; then
