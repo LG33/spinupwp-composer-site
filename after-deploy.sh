@@ -64,7 +64,9 @@ else
 fi
 
 cp public/wp-content/mu-plugins/wp-paheko/src/config.dist.php public/wp-content/mu-plugins/wp-paheko/src/config.local.php
+rm -r public/wp-content/mu-plugins/wp-paheko/src/modules
 ln -s ../../../../../vendor/paheko/paheko-modules public/wp-content/mu-plugins/wp-paheko/src/modules
+rm -r public/wp-content/mu-plugins/wp-paheko/src/data
 ln -s ../../../paheko/data public/wp-content/mu-plugins/wp-paheko/src
 
 cd public/wp
@@ -75,6 +77,6 @@ elif [ -f wp-content ]; then
 fi
 ln -s ../wp-content
     
-wp core install --url=https://${env[DOMAIN]} --title="${env[TITLE]}" --admin_user="${env[EMAIL]}" --admin_password="${env[PASSWORD]}" --admin_email="${env[EMAIL]}" --skip-email --locale=fr_FR
+wp core install --url=https://${env[DOMAIN]} --title="${env[TITLE]}" --admin_user="${env[EMAIL]}" --admin_password="${env[PASSWORD]}" --admin_email="${env[EMAIL]}" --locale=fr_FR
 wp plugin activate --all
 wp theme install twentytwentyfive --activate
